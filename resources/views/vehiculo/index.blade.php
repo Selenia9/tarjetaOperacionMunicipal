@@ -68,6 +68,7 @@ nmcnbbc
                     <th>PROPIETARIO</th>
                   {{--   <th>USUARIO</th> --}}
                     <th>ORGANIZACION</th>
+                    <th>VALIDO</th>
                     <th>PLACA</th>
                     <th>MARCA</th>
                     <th>TIPO VEHICULO</th>
