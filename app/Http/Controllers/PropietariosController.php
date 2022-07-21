@@ -20,8 +20,7 @@ class PropietariosController extends Controller
 
         abort_if(Gate::denies('propietarios_index'), 403);
 
-        $nombre = $request->get('buscarpornombre');
-        $propietarios = Propietario::orderBy('id', 'desc')->get();
+        $propietarios = Propietario::all();
 
         return view('propietario.index', compact('propietarios'));
 
@@ -35,9 +34,7 @@ class PropietariosController extends Controller
     public function create()
     {
         //
-        abort_if(Gate::denies('propietarios_create'), 403);
 
-        return view('propietario.create');
     }
 
     /**
@@ -48,19 +45,7 @@ class PropietariosController extends Controller
      */
     public function store(Request $request)
     {
-         //
-         $request->validate([
-            'nombre' => 'required|min:10',
-            'domicilio' => 'required',
-            'telefono' => 'required',
-
-        ]);
-        $propietario = new Propietario();
-        $propietario->nombre = $request->nombre;
-        $propietario->domicilio = $request->domicilio;
-        $propietario->telefono = $request->telefono;
-        $propietario->save();
-        return redirect()->route('propietario.index')->with('datos','Registrado Correctamente');
+       //
 
     }
 
@@ -73,9 +58,6 @@ class PropietariosController extends Controller
     public function show($id)
     {
         //
-        abort_if(Gate::denies('propietarios_show'), 403);
-        $propietario = Propietario::find($id);
-        return view('propietario.show', compact('propietario'));
 
        }
 
@@ -88,10 +70,6 @@ class PropietariosController extends Controller
     public function edit($id)
     {
         //
-        abort_if(Gate::denies('propietarios_edit'), 403);
-        $propietario = Propietario::findOrFail($id);
-        return view('propietario.edit', compact('propietario'));
-
 
     }
 
@@ -104,14 +82,6 @@ class PropietariosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        $propietario = Propietario::findOrFail($id);
-        $propietario->nombre = $request->nombre;
-        $propietario->domicilio = $request->domicilio;
-        $propietario->telefono = $request->telefono;
-        $propietario->save();
-
-        return redirect()->route('propietario.index')->with('datos','Actualizado Correctamente');
 
     }
 
@@ -121,21 +91,4 @@ class PropietariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirm($id)
-    {
-      $propietario = Propietario::findOrFail($id);
-        return view('propietario.confirm', compact('propietario'));
-    }
-    public function destroy($id)
-    {
-        //
-        abort_if(Gate::denies('propietarios_destroy'), 403);
-
-        $propietario = Propietario::findOrFail($id);
-        $propietario->delete();
-        return redirect()->route('propietario.index')->with('datos','Eliminado Correctamente');
-
-
-    }
-
 }

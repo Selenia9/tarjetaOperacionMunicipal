@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\Qrcode;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class VehiculosController extends Controller
 {
@@ -55,53 +56,63 @@ class VehiculosController extends Controller
     {
 
            //
-           $request->validate([
-            'anio' => 'required',
-            'placa' => 'required',
-            'color' => 'required',
-            'chasis' => 'required',
-            'motor' => 'required',
-            'capacidad' => 'required',
-            'asiento'=> 'required',
-            'modelo' => 'required',
-            'marca' => 'required',
-            'tipoVehiculo' => 'required',
-            'combustible' => 'required',
-            'rutaAutorizada' => 'required',
-            'fechaInicio' => 'required',
-            'fechaFin' => 'required',
+    $request->validate([
+        'anio' => 'required',
+        'placa' => 'required',
+        'color' => 'required',
+        'chasis' => 'required',
+        'motor' => 'required',
+        'capacidad' => 'required',
+        'asiento'=> 'required',
+        'modelo' => 'required',
+        'marca' => 'required',
+        'tipoVehiculo' => 'required',
+        'combustible' => 'required',
+        'rutaAutorizada' => 'required',
+        'fechaInicio' => 'required',
+        'fechaFin' => 'required',
 
-        ]);
-
-
-      /*   DB::table('vehiculos')->select('n')->whereRaw('id = (SELECT max(n) FROM vehiculos)')->get(); */
-     /*  DB::table('vehiculos')->select(DB::raw('FLOOR(5 + RAND(n)*(13-5))'))->get(); */
-     $vehiculo = new Vehiculo;
-     $n = Helper::IDGenerator(new Vehiculo, 'n', 4, 'N°'); /** Generate id */
+    ]);
 
 
-     $vehiculo->n = $n;
+    /*   DB::table('vehiculos')->select('n')->whereRaw('id = (SELECT max(n) FROM vehiculos)')->get(); */
+    /*  DB::table('vehiculos')->select(DB::raw('FLOOR(5 + RAND(n)*(13-5))'))->get(); */
 
-   /*   $vehiculo->n = $request->n; */
-     $vehiculo->anio = $request->anio;
-     $vehiculo->placa = $request->placa;
-     $vehiculo->color = $request->color;
-     $vehiculo->chasis = $request->chasis;
-     $vehiculo->motor = $request->motor;
-     $vehiculo->capacidad = $request->capacidad;
-     $vehiculo->asiento = $request->asiento;
-     $vehiculo->modelo = $request->modelo;
-     $vehiculo->marca = $request->marca;
-     $vehiculo->tipoVehiculo = $request->tipoVehiculo;
-     $vehiculo->combustible = $request->combustible;
-     $vehiculo->rutaAutorizada = $request->rutaAutorizada;
-     $vehiculo->fechaInicio = $request->fechaInicio;
-     $vehiculo->fechaFin = $request->fechaFin;
-     $vehiculo->organizacion_id = $request->organizacion;
-     $vehiculo->propietario_id = $request->propietario;
+  /*  try{
+    DB::beginTransaction(); */
+        $propietario = new Propietario();
+        $propietario->nombre = $request->nombre;
+        $propietario->domicilio = $request->domicilio;
+        $propietario->telefono = $request->telefono;
+        $propietario->save();
+        $vehiculo = new Vehiculo;
+        $vehiculo->propietario_id = $propietario->id;
+        $n = Helper::IDGenerator(new Vehiculo, 'n', 4, 'N°'); /** Generate id */
+        $vehiculo->n = $n;
+        $vehiculo->anio = $request->anio;
+        $vehiculo->placa = $request->placa;
+        $vehiculo->color = $request->color;
+        $vehiculo->chasis = $request->chasis;
+        $vehiculo->motor = $request->motor;
+        $vehiculo->capacidad = $request->capacidad;
+        $vehiculo->asiento = $request->asiento;
+        $vehiculo->modelo = $request->modelo;
+        $vehiculo->marca = $request->marca;
+        $vehiculo->tipoVehiculo = $request->tipoVehiculo;
+        $vehiculo->combustible = $request->combustible;
+        $vehiculo->rutaAutorizada = $request->rutaAutorizada;
+        $vehiculo->fechaInicio = $request->fechaInicio;
+        $vehiculo->fechaFin = $request->fechaFin;
+        $vehiculo->organizacion_id = $request->organizacion;
 
-     $vehiculo->save();
-     return redirect()->route('vehiculo.index')->with('datos', 'Registrado Correctamente');
+
+        $vehiculo->save();
+        return redirect()->route('vehiculo.index')->with('datos', 'Registrado Correctamente');
+ /*       DB::cammit();
+}catch (\Exception $e){
+     DB::rollback();
+    return response()->json(['message' => 'error']);
+} */
 }
 
     /**
@@ -135,9 +146,8 @@ class VehiculosController extends Controller
         abort_if(Gate::denies('vehiculo_edit'), 403);
         $vehiculo = Vehiculo::findOrFail($id);
         $organizaciones = Organizacione::orderBy('nombre', 'asc')->get();
-
-        $propietarios = Propietario::orderBy('nombre', 'asc')->get();
-        return view('vehiculo.edit', compact('vehiculo', 'organizaciones', 'propietarios'));
+        $propietario = Propietario::findOrFail($id);
+        return view('vehiculo.edit', compact('vehiculo', 'organizaciones', 'propietario'));
     }
 
     /**
@@ -150,7 +160,13 @@ class VehiculosController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $propietario = Propietario::findOrFail($id);
+        $propietario->nombre = $request->nombre;
+        $propietario->domicilio = $request->domicilio;
+        $propietario->telefono = $request->telefono;
+        $propietario->save();
         $vehiculo = Vehiculo::findOrFail($id);
+        $vehiculo->propietario_id = $propietario->id;
         $vehiculo->n = $request->n;
         $vehiculo->anio = $request->anio;
         $vehiculo->placa = $request->placa;
@@ -172,7 +188,6 @@ class VehiculosController extends Controller
 
         $vehiculo->organizacion_id = $request->organizacion;
 
-        $vehiculo->propietario_id = $request->propietario;
         $vehiculo->save();
 
         return redirect()->route('vehiculo.index')->with('datos', 'Actualizado Correctamente');

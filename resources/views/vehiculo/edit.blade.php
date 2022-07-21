@@ -58,16 +58,24 @@
                 <div class="row">
                     <div class="col-sm-6">
                     <div class="form-group">
-                    <label>PROPIETARIO</label>
-                    <select  class="form-control" name="propietario">
-                    @foreach($propietarios as $propietario)
-                    @if($propietario->id == $vehiculo->propietario_id)
-                    <option value="{{ $propietario->id }}">{{$propietario->nombre}}</option>
-                    @endif
-                    @endforeach
-                    </select>
+                    <label>NOMBRE COMPLETO</label>
+                    <input type="text" class="form-control "  name="nombre" value="{{ $propietario->nombre }}">
                     </div>
                     </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-9">
+                  <div class="form-group">
+                    <label>DOMICILIO</label>
+                    <input type="text" class="form-control" name="domicilio" value="{{ $propietario->domicilio }}">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>TELEFONO</label>
+                       <input type="text" class="form-control "  name="telefono" value="{{ $propietario->telefono }}">
+                      </div>
+                </div>
               </div>
 
               <div class="row">

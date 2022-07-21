@@ -22,14 +22,6 @@
             <br>
             <br>
             <div class="card-body">
-                <div style="margin-left: 50px; ">
-nmcnbbc
-                    <h2 id="fecha" style="   font-size: 15px; color: rgb(218, 4, 4);">
-                    <script type="text/javascript">
-                        fecha();
-                    </script>
-                   </h2>
-                </div>
                 <div class="row">
                     <div class="col-12 text-right">
                         @can('vehiculo_create')
@@ -60,15 +52,14 @@ nmcnbbc
                   @endif
 
 
-                <table class="table table-hover" id="vehiculo">
+                  <table class="table table-striped table-bordered nowrap" id="vehiculo">
                     <thead class="text-primary">
-                     <tr>
+                    <tr>
 
                     <th>N</th>
                     <th>PROPIETARIO</th>
                   {{--   <th>USUARIO</th> --}}
                     <th>ORGANIZACION</th>
-                    <th>VALIDO</th>
                     <th>PLACA</th>
                     <th>MARCA</th>
                     <th>TIPO VEHICULO</th>
@@ -145,6 +136,9 @@ nmcnbbc
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
     <script>$(document).ready(function () {
-        $('#vehiculo').DataTable();
+        $('#vehiculo').DataTable({
+            responsive:true,
+            autoWidth:false
+        });
     });</script>
 @stop

@@ -68,20 +68,58 @@
                         </div>
                   </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                    <div class="form-group">
-                    <label>PROPIETARIO</label>
-                    <select  class="form-control" name="propietario">
-                        <option value="">selccione el propietaario</option>
-                    @foreach($propietarios as $propietario)
-                    <option value="{{ $propietario->id }}">{{$propietario->nombre}}</option>
-                    @endforeach
-                    </select>
-                    </div>
-                    </div>
-              </div>
+                        {{-- ----------------------------- COMBOBOX DE PROPIETARIO ---------------------------------}}
+                      {{--   <div class="row">
+                            <div class="col-sm-6">
+                                <label for="txtBrand">PROPIETARIO</label>
+                                <div class="input-group">
+                                    <select  id="txtBrand" class="form-control" name="propietario">
+                                            <option selected>selccione el propietaario</option>
+                                            @foreach($propietarios as $propietario)
+                                            <option value="{{ $propietario->id }}">{{$propietario->nombre}}</option>
+                                            @endforeach
+                                      </select>
+                                       <div class="input-group-append">
+                                          <button class="btn btn-success" type="button" data-toggle="modal" data-target="#showModal" data-whatever="@mdo"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                        </div>
+                                  </div>
+                            </div>
+                        </div> --}}
 
+                        {{-- ----------------------------- FIN COMBOBOX DE PROPIETARIO ---------------------------------}}
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                            <div class="form-group">
+                            <label>NOMBRE COMPLETO</label>
+                            <input type="text" class="form-control "  name="nombre"value="{{ old('nombre')}}">
+                            @if ($errors->has('nombre'))
+                            <span class="error text-danger" for="input-nombre">{{ $errors->first('nombre') }}</span>
+                          @endif
+                        </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-9">
+                          <div class="form-group">
+                            <label>DOMICILIO</label>
+                            <input type="text" class="form-control" name="domicilio" value="{{ old('domicilio')}}">
+                            @if ($errors->has('domicilio'))
+                            <span class="error text-danger" for="input-domicilio">{{ $errors->first('domicilio') }}</span>
+                          @endif
+                        </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>TELEFONO</label>
+                               <input type="text" class="form-control "  name="telefono" value="{{ old('telefono')}}">
+                               @if ($errors->has('telefono'))
+                            <span class="error text-danger" for="input-telefono">{{ $errors->first('telefono') }}</span>
+                          @endif
+                            </div>
+                        </div>
+                      </div>
+{{-- //////////////////////////////////////////////////////////// --}}
               <div class="row">
                 <div class="col-sm-4">
                     <label>PLACA N°</label>
